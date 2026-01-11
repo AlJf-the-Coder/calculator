@@ -14,11 +14,12 @@ digitButtons.forEach(btn => btn.addEventListener('click',
 
 operatorButtons.forEach(btn => btn.addEventListener('click', 
     () => {
-        if (operand1) {
+        const currentOp = btn.textContent;
+        if (typeof operand1 == 'number') {
             const lastOpIndex = display.textContent.lastIndexOf(operator)
             // replace operator if last input is also operator
             if (lastOpIndex == display.textContent.length - 1){
-                operator = btn.textContent;
+                operator = currentOp;
                 return;
             }
             operand2 = display.textContent.slice(lastOpIndex + 1)
@@ -35,10 +36,10 @@ operatorButtons.forEach(btn => btn.addEventListener('click',
             //validate operand
             operand1 = +operand1;
         }
-        if (operator != '='){
-            operator = btn.textContent;
+        if (currentOp != '='){
+            operator = currentOp;
+            display.textContent += currentOp;
         }
-        display.textContent += operator;
     }
 ))
 
@@ -62,12 +63,12 @@ function operate(a, op, b){
     switch (op){
         case '+':
             return add(a, b);
-        case '-':
-            return add(a, b);
-        case '*':
-            return add(a, b);
-        case '/':
-            return add(a, b);
+        case '−':
+            return subtract(a, b);
+        case '×':
+            return multiply(a, b);
+        case '÷':
+            return divide(a, b);
         default:
             return;
     }

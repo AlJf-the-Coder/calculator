@@ -8,14 +8,26 @@ const operatorButtons = document.querySelectorAll('.operators button');
 
 digitButtons.forEach(btn => btn.addEventListener('click', 
     () => {
-        display.textContent += btn.textContent;
+        const digit = btn.textContent;
+        const operationDone = operator && !display.textContent.includes(operator)
+        if (operationDone){
+            //reset calculator
+            display.textContent = digit;
+            operand1 = digit;
+            operator = null;
+            operand2 = null;
+        } else {
+            display.textContent += digit;
+        }
     }
 ))
 
 operatorButtons.forEach(btn => btn.addEventListener('click', 
     () => {
         const currentOp = btn.textContent;
-        if (typeof operand1 == 'number') {
+        const hasParsedOperand1 = typeof operand1 == 'number';
+
+        if (hasParsedOperand1) {
             const lastOpIndex = display.textContent.lastIndexOf(operator)
             // replace operator if last input is also operator
             if (lastOpIndex == display.textContent.length - 1){

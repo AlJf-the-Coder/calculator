@@ -1,0 +1,71 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+*,
+*::after,
+*::before {
+    box-sizing: border-box;
+}
+
+body {
+    padding: 12px;
+}
+
+h1 {
+    margin-bottom: 24px;
+}
+
+div.calculator {
+    display: flex;
+    flex-direction: column;
+    gap: 35px;
+    padding: 20px;
+    height: 480px;
+    width: 350px;
+    border: 1px solid black;
+    margin-left: 20px;
+}
+
+div.display {
+    flex-grow: 2;
+    padding: 20px;
+    border: 1px solid black;
+}
+
+div.buttons {
+    display: flex;
+    gap: 25px;
+}
+
+div.digits {
+    display: flex;
+    justify-content: space-evenly;
+    align-content: space-between;
+    flex-wrap: wrap-reverse;
+    gap: 25px;
+    width: 75%;
+}
+
+button#zero{
+    width: 90%;
+}
+
+div.operators {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 15px;
+    width: 25%;
+}
+
+
+.digits button{
+    width: 25%;
+    height: 50px;
+    flex-grow: 1;
+}
+
+.operators button {
+    height: 40px;
+}

@@ -22,9 +22,13 @@ operatorButtons.forEach(btn => btn.addEventListener('click',
                 operator = currentOp;
                 return;
             }
-            operand2 = display.textContent.slice(lastOpIndex + 1)
-            // validate operand
-            operand2 = +operand2;
+
+            // calculated result not yet on display
+            if (lastOpIndex > 0){
+                operand2 = display.textContent.slice(lastOpIndex + 1)
+                // validate operand
+                operand2 = +operand2;
+            }
 
             const result = operate(operand1, operator, operand2);
             operand1 = result;
@@ -36,6 +40,7 @@ operatorButtons.forEach(btn => btn.addEventListener('click',
             //validate operand
             operand1 = +operand1;
         }
+
         if (currentOp != '='){
             operator = currentOp;
             display.textContent += currentOp;

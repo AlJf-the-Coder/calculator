@@ -1,6 +1,14 @@
 const display = document.querySelector('#display')
 const digitButtons = document.querySelectorAll('.digits button');
+const operatorButtons = document.querySelectorAll('.operators button');
+
 digitButtons.forEach(btn => btn.addEventListener('click', 
+    () => {
+        display.textContent += btn.textContent;
+    }
+))
+
+operatorButtons.forEach(btn => btn.addEventListener('click', 
     () => {
         display.textContent += btn.textContent;
     }

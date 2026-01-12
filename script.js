@@ -31,6 +31,7 @@ operatorButtons.forEach(btn => btn.addEventListener('click',
             const lastOpIndex = display.textContent.lastIndexOf(operator)
             // replace operator if last input is also operator
             if (lastOpIndex == display.textContent.length - 1){
+                display.textContent = display.textContent.slice(0, -1) + currentOp;
                 operator = currentOp;
                 return;
             }
@@ -40,8 +41,9 @@ operatorButtons.forEach(btn => btn.addEventListener('click',
                 operand2 = display.textContent.slice(lastOpIndex + 1)
                 // validate operand
                 operand2 = +operand2;
-            }
-
+            } 
+            // fix bug that repeats operation when pressing op
+            // other than equals
             const result = operate(operand1, operator, operand2);
             operand1 = result;
             display.textContent = result.toString();

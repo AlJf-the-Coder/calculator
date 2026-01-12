@@ -29,6 +29,7 @@ operatorButtons.forEach(btn => btn.addEventListener('click',
 
         if (hasParsedOperand1) {
             const lastOpIndex = display.textContent.lastIndexOf(operator)
+            const hasCompletedCalculation =  lastOpIndex < 0; // no operator in display
             // replace operator if last input is also operator
             if (lastOpIndex == display.textContent.length - 1){
                 display.textContent = display.textContent.slice(0, -1) + currentOp;
@@ -36,17 +37,19 @@ operatorButtons.forEach(btn => btn.addEventListener('click',
                 return;
             }
 
-            // calculated result not yet on display
-            if (lastOpIndex > 0){
+            if (!hasCompletedCalculation){
                 operand2 = display.textContent.slice(lastOpIndex + 1)
                 // validate operand
                 operand2 = +operand2;
             } 
-            // fix bug that repeats operation when pressing op
-            // other than equals
-            const result = operate(operand1, operator, operand2);
-            operand1 = result;
-            display.textContent = result.toString();
+
+            if (!hasCompletedCalculation || operator != null && currentOp == '='){
+                const result = operate(operand1, operator, operand2);
+                operand1 = result;
+                display.textContent = result.toString();
+            } else {
+                operand2 = null;
+            }
         } else {
             // case where operator is input first
             // ...

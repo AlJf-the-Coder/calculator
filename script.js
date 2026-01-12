@@ -16,6 +16,8 @@ digitButtons.forEach(btn => btn.addEventListener('click',
             operand1 = digit;
             operator = null;
             operand2 = null;
+        } else if (display.textContent == '0') {
+            display.textContent = digit;
         } else {
             display.textContent += digit;
         }
@@ -39,7 +41,6 @@ operatorButtons.forEach(btn => btn.addEventListener('click',
 
             if (!hasCompletedCalculation){
                 operand2 = display.textContent.slice(lastOpIndex + 1)
-                // validate operand
                 operand2 = +operand2;
             } 
 
@@ -51,10 +52,7 @@ operatorButtons.forEach(btn => btn.addEventListener('click',
                 operand2 = null;
             }
         } else {
-            // case where operator is input first
-            // ...
             operand1 = display.textContent;
-            //validate operand
             operand1 = +operand1;
         }
 

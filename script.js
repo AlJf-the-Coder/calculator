@@ -33,13 +33,15 @@ operatorButtons.forEach(btn => btn.addEventListener('click',
             const lastOpIndex = display.textContent.lastIndexOf(operator)
             const hasCompletedCalculation =  lastOpIndex < 0; // no operator in display
             // replace operator if last input is also operator
-            if (lastOpIndex == display.textContent.length - 1){
+            if (lastOpIndex == display.textContent.length - 1 && currentOp != '='){
                 display.textContent = display.textContent.slice(0, -1) + currentOp;
                 operator = currentOp;
                 return;
             }
 
-            if (!hasCompletedCalculation){
+            if (lastOpIndex == display.textContent.length - 1 && currentOp == '='){
+                operand2 = operand1;
+            } else if (!hasCompletedCalculation){
                 operand2 = display.textContent.slice(lastOpIndex + 1)
                 operand2 = +operand2;
             } 

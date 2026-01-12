@@ -1,10 +1,18 @@
-let operand1;
-let operand2;
-let operator;
+let operand1 = null;
+let operand2 = null;
+let operator = null;
 
 const display = document.querySelector('#display')
 const digitButtons = document.querySelectorAll('.digits button');
 const operatorButtons = document.querySelectorAll('.operators button');
+const clearButton = document.querySelector('.functions #clear')
+
+clearButton.addEventListener('click', () => {
+    display.textContent = '0';
+    operand1 = null;
+    operator = null;
+    operand2 = null;
+})
 
 digitButtons.forEach(btn => btn.addEventListener('click', 
     () => {
@@ -13,7 +21,7 @@ digitButtons.forEach(btn => btn.addEventListener('click',
         if (operationDone){
             //reset calculator
             display.textContent = digit;
-            operand1 = digit;
+            operand1 = null;
             operator = null;
             operand2 = null;
         } else if (display.textContent == '0') {

@@ -2,6 +2,8 @@ let operand1 = ['0'];
 let operand2 = []; 
 let operator = null;
 
+const ERROR_MESSAGES = ["Oops! You divided by zero!"]
+
 const display = document.querySelector('#display')
 const digitButtons = document.querySelectorAll('.digits button');
 const operatorButtons = document.querySelectorAll('.operators button');
@@ -16,6 +18,7 @@ clearButton.addEventListener('click', () => {
 
 digitButtons.forEach(btn => btn.addEventListener('click', 
     () => {
+        if (ERROR_MESSAGES.includes(display.textContent)) return;
         const digit = btn.textContent;
         const hasParsedOperand1 = typeof operand1 == 'number';
         if (!hasParsedOperand1 && display.textContent == '0'){
@@ -49,6 +52,7 @@ digitButtons.forEach(btn => btn.addEventListener('click',
 
 operatorButtons.forEach(btn => btn.addEventListener('click', 
     () => {
+        if (ERROR_MESSAGES.includes(display.textContent)) return;
         const currentOp = btn.textContent;
         const hasParsedOperand1 = typeof operand1 == 'number';
 
@@ -70,8 +74,11 @@ operatorButtons.forEach(btn => btn.addEventListener('click',
 
             if (!hasCompletedCalculation || operator != null && currentOp == '='){
                 const result = operate(operand1, operator, operand2);
-                operand1 = result;
                 display.textContent = result.toString();
+                if (typeof result == "string"){
+                    return;
+                }
+                operand1 = result;
                 operand2 = (currentOp != '=') ? [] : operand2;
             } else {
                 operand2 = [];
@@ -91,7 +98,7 @@ const operations = {
     '+': (a, b) => a + b,
     '−': (a, b) => a - b,
     '×': (a, b) => a * b,
-    '÷': (a, b) => a / b,
+    '÷': (a, b) => (b != 0) ? a / b : "Oops! You divided by zero!",
 }
 
 function operate(a, op, b){

@@ -24,13 +24,18 @@ digitButtons.forEach(btn => btn.addEventListener('click',
             operand1 = null;
             operator = null;
             operand2 = null;
-        } else if (display.textContent == '0') {
+            return;
+        } 
+        const lastOpIndex = display.textContent.lastIndexOf(operator)
+        if (display.textContent == '0'){
             display.textContent = digit;
+        } else if (display.textContent.slice(lastOpIndex + 1) == '0') {
+            display.textContent = display.textContent.slice(0, lastOpIndex + 1) + digit;
         } else {
             display.textContent += digit;
         }
-    }
-))
+    })
+)
 
 operatorButtons.forEach(btn => btn.addEventListener('click', 
     () => {

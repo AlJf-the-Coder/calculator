@@ -59,6 +59,12 @@ digitButtons.forEach(btn => btn.addEventListener('click',
                 operator = null;
                 state = states.OPERAND1;
                 break;
+            case states.ERROR:
+                displayResult.textContent = digit;
+                operand1 = [digit];
+                operand2 = [];
+                operator = null;
+                state = states.OPERAND1;
         }
     })
 )

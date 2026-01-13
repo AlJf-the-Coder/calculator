@@ -1,5 +1,5 @@
 let operand1 = null;
-let operand2 = null;
+let operand2 = null; 
 let operator = null;
 
 const display = document.querySelector('#display')
@@ -17,23 +17,28 @@ clearButton.addEventListener('click', () => {
 digitButtons.forEach(btn => btn.addEventListener('click', 
     () => {
         const digit = btn.textContent;
-        const operationDone = operator && !display.textContent.includes(operator)
-        if (operationDone){
-            //reset calculator
+        const hasParsedOperand1 = typeof operand1 == 'number';
+        if (!hasParsedOperand1 && display.textContent == '0'){
             display.textContent = digit;
-            operand1 = null;
-            operator = null;
-            operand2 = null;
             return;
-        } 
-        const lastOpIndex = display.textContent.lastIndexOf(operator)
-        if (display.textContent == '0'){
-            display.textContent = digit;
-        } else if (display.textContent.slice(lastOpIndex + 1) == '0') {
-            display.textContent = display.textContent.slice(0, lastOpIndex + 1) + digit;
-        } else {
-            display.textContent += digit;
         }
+
+        if (hasParsedOperand1){
+            const lastOpIndex = display.textContent.lastIndexOf(operator);
+            const hasCompletedCalculation = lastOpIndex < 0; // no operator in display
+            if (hasCompletedCalculation){
+                //reset calculator
+                display.textContent = digit;
+                operand1 = null;
+                operator = null;
+                operand2 = null;
+                return;
+            } else if (display.textContent.slice(lastOpIndex + 1) == '0') {
+                display.textContent = display.textContent.slice(0, lastOpIndex + 1) + digit;
+                return;
+            }
+        }
+        display.textContent += digit;
     })
 )
 

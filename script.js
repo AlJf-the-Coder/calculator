@@ -55,8 +55,6 @@ digitButtons.forEach(btn => btn.addEventListener('click',
             case states.DONE:
                 displayResult.textContent = digit;
                 operand1 = [digit];
-                operand2 = [];
-                operator = null;
                 state = states.OPERAND1;
                 break;
             case states.ERROR:
@@ -74,10 +72,19 @@ operatorButtons.forEach(btn => btn.addEventListener('click',
         const currentOp = btn.textContent;
         switch (state){
             case states.OPERAND1:
-                if (currentOp != '='){
+                if (currentOp == '='){
+                    if (operator && typeof operand2 == "number") {
+                        operand1 = +operand1.join('');
+                        const result = operate(operand1, operator, operand2);
+                        operand1 = result;
+                        displayResult.textContent = result.toString();
+                        state = states.DONE;
+                    }
+                } else {
                     displayResult.textContent += currentOp;
                     operator = currentOp;
                     operand1 = +operand1.join('');
+                    operand2 = [];
                     state = states.OPERATOR;
                 }
                 break;

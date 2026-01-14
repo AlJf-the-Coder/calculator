@@ -17,6 +17,26 @@ const displayCalculation = document.querySelector('.display #calculation')
 const digitButtons = document.querySelectorAll('.digits button');
 const operatorButtons = document.querySelectorAll('.operators button');
 const clearButton = document.querySelector('.functions #clear')
+const backspaceButton = document.querySelector('.functions #backspace');
+
+backspaceButton.addEventListener('click', () => {
+    switch (state){
+        case states.OPERAND1:
+            operand1.pop();
+            if (operand1.length == 0){
+                operand1.push('0')
+            }
+            displayResult.textContent = operand1.join('')
+            break;
+        case states.OPERAND2:
+            operand2.pop();
+            if (operand2.length == 0){
+                operand2.push('0')
+            }
+            displayResult.textContent = operand2.join('')
+            break;
+    }
+})
 
 clearButton.addEventListener('click', () => {
     displayResult.textContent = '0';

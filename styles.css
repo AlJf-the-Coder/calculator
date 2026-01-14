@@ -67,7 +67,10 @@ div.functions button {
 }
 
 div.functions {
+    display: flex;
     flex-grow: 1;
+    justify-content: space-between;
+    gap: 5px;
 }
 
 div.digits {

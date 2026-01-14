@@ -13,12 +13,14 @@ const states = {
 let state = states.OPERAND1;
 
 const displayResult = document.querySelector('.display #result')
+const displayCalculation = document.querySelector('.display #calculation')
 const digitButtons = document.querySelectorAll('.digits button');
 const operatorButtons = document.querySelectorAll('.operators button');
 const clearButton = document.querySelector('.functions #clear')
 
 clearButton.addEventListener('click', () => {
     displayResult.textContent = '0';
+    displayCalculation.textContent = '';
     operand1 = ['0'];
     operand2 = [];
     operator = null;
@@ -39,13 +41,13 @@ digitButtons.forEach(btn => btn.addEventListener('click',
                 }
                 break;
             case states.OPERATOR:
-                displayResult.textContent += digit;
+                displayResult.textContent = digit;
                 operand2 = [digit];
                 state = states.OPERAND2;
                 break;
             case states.OPERAND2:
                 if (operand2.length == 1 && operand2[0] == '0'){
-                    displayResult.textContent = displayResult.textContent.slice(0, -1) + digit;
+                    displayResult.textContent = digit;
                     operand2 = [digit];
                 } else {
                     displayResult.textContent += digit;
@@ -59,6 +61,7 @@ digitButtons.forEach(btn => btn.addEventListener('click',
                 break;
             case states.ERROR:
                 displayResult.textContent = digit;
+                displayCalculation.textContent = '';
                 operand1 = [digit];
                 operand2 = [];
                 operator = null;
@@ -76,15 +79,16 @@ operatorButtons.forEach(btn => btn.addEventListener('click',
                     if (operator && typeof operand2 == "number") {
                         operand1 = +operand1.join('');
                         const result = operate(operand1, operator, operand2);
-                        operand1 = result;
+                        displayCalculation.textContent = `${operand1}${operator}${operand2}=`
                         displayResult.textContent = result.toString();
+                        operand1 = result;
                         state = states.DONE;
                     }
                 } else {
-                    displayResult.textContent += currentOp;
-                    operator = currentOp;
                     operand1 = +operand1.join('');
+                    displayCalculation.textContent += `${operand1}${currentOp}`;
                     operand2 = [];
+                    operator = currentOp;
                     state = states.OPERATOR;
                 }
                 break;
@@ -94,13 +98,15 @@ operatorButtons.forEach(btn => btn.addEventListener('click',
                     const result = operate(operand1, operator, operand2);
                     displayResult.textContent = result.toString();
                     if (typeof result == "string"){
+                        displayCalculation.textContent = '';
                         state = states.ERROR;
                     } else {
-                        state = states.DONE;
+                        displayCalculation.textContent = `${operand1}${operator}${operand2}=`
                         operand1 = result;
+                        state = states.DONE;
                     }
                 } else {
-                    displayResult.textContent = displayResult.textContent.slice(0, -1) + currentOp;
+                    displayCalculation.textContent = displayCalculation.textContent.slice(0, -1) + currentOp;
                     operator = currentOp;
                 }
                 break;
@@ -109,26 +115,29 @@ operatorButtons.forEach(btn => btn.addEventListener('click',
                 const result = operate(operand1, operator, operand2);
                 displayResult.textContent = result.toString();
                 if (typeof result == "string"){
+                    displayCalculation.textContent = '';
                     state = states.ERROR;
                     return;
                 }
-                operand1 = result;
                 if (currentOp == '='){
+                    displayCalculation.textContent = `${operand1}${operator}${operand2}=`;
                     state = states.DONE;
                 } else {
-                    displayResult.textContent += currentOp;
+                    displayCalculation.textContent = `${result}${currentOp}`;
                     operator = currentOp;
                     operand2 = []; 
                     state = states.OPERATOR;
                 }
+                operand1 = result;
                 break;
             case states.DONE:
                 if (currentOp == '='){
                     const result = operate(operand1, operator, operand2);
+                    displayCalculation.textContent = `${operand1}${operator}${operand2}=`;
                     operand1 = result;
                     displayResult.textContent = result.toString();
                 } else {
-                    displayResult.textContent += currentOp;
+                    displayCalculation.textContent = `${operand1}${currentOp}`;
                     operator = currentOp;
                     operand2 = []; 
                     state = states.OPERATOR;

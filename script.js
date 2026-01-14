@@ -76,6 +76,7 @@ digitButtons.forEach(btn => btn.addEventListener('click',
                 break;
             case states.DONE:
                 displayResult.textContent = digit;
+                displayCalculation.textContent = '';
                 operand1 = [digit];
                 state = states.OPERAND1;
                 break;

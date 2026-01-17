@@ -15,6 +15,7 @@ let state = states.OPERAND1;
 const displayResult = document.querySelector('.display #result')
 const displayCalculation = document.querySelector('.display #calculation')
 const digitButtons = document.querySelectorAll('button.digit');
+const dotButton = document.querySelector('button#dot');
 const operatorButtons = document.querySelectorAll('button.operator');
 const clearButton = document.querySelector('button#clear')
 const backspaceButton = document.querySelector('button#backspace');
@@ -46,6 +47,41 @@ clearButton.addEventListener('click', () => {
     operator = null;
     state = states.OPERAND1;
 })
+
+dotButton.addEventListener('click', () => {
+    const dot = dotButton.textContent;
+    switch (state){
+        case states.OPERAND1:
+            if (displayResult.textContent.includes(dot)) return;
+            displayResult.textContent += dot;
+            operand1.push(dot)
+            break;
+        case states.OPERATOR:
+            displayResult.textContent = `0${dot}`;
+            operand2 = ['0', dot];
+            state = states.OPERAND2;
+            break;
+        case states.OPERAND2:
+            if (displayResult.textContent.includes(dot)) return;
+            displayResult.textContent += dot;
+            operand2.push(dot)
+            break;
+        case states.DONE:
+            displayResult.textContent = `0${dot}`;
+            displayCalculation.textContent = '';
+            operand1 = ['0', dot];
+            state = states.OPERAND1;
+            break;
+        case states.ERROR:
+            displayResult.textContent = `0${dot}`;
+            displayCalculation.textContent = '';
+            operand1 = ['0', dot];
+            operand2 = [];
+            operator = null;
+            state = states.OPERAND1;
+    }
+})
+
 
 digitButtons.forEach(btn => btn.addEventListener('click', 
     () => {

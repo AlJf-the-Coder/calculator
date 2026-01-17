@@ -23,14 +23,18 @@ const backspaceButton = document.querySelector('button#backspace');
 backspaceButton.addEventListener('click', () => {
     switch (state){
         case states.OPERAND1:
-            operand1.pop();
+            if (operand1.pop() == '.'){
+                dotButton.disabled = false;
+            } 
             if (operand1.length == 0){
                 operand1.push('0')
             }
             displayResult.textContent = operand1.join('')
             break;
         case states.OPERAND2:
-            operand2.pop();
+            if (operand2.pop() == '.'){
+                dotButton.disabled = false;
+            } 
             if (operand2.length == 0){
                 operand2.push('0')
             }
@@ -45,6 +49,7 @@ clearButton.addEventListener('click', () => {
     operand1 = ['0'];
     operand2 = [];
     operator = null;
+    dotButton.disabled = false;
     state = states.OPERAND1;
 })
 
@@ -52,7 +57,6 @@ dotButton.addEventListener('click', () => {
     const dot = dotButton.textContent;
     switch (state){
         case states.OPERAND1:
-            if (displayResult.textContent.includes(dot)) return;
             displayResult.textContent += dot;
             operand1.push(dot)
             break;
@@ -62,7 +66,6 @@ dotButton.addEventListener('click', () => {
             state = states.OPERAND2;
             break;
         case states.OPERAND2:
-            if (displayResult.textContent.includes(dot)) return;
             displayResult.textContent += dot;
             operand2.push(dot)
             break;
@@ -80,6 +83,7 @@ dotButton.addEventListener('click', () => {
             operator = null;
             state = states.OPERAND1;
     }
+    dotButton.disabled = true;
 })
 
 
@@ -100,6 +104,7 @@ digitButtons.forEach(btn => btn.addEventListener('click',
                 displayResult.textContent = digit;
                 operand2 = [digit];
                 state = states.OPERAND2;
+                dotButton.disabled = false;
                 break;
             case states.OPERAND2:
                 if (operand2.length == 1 && operand2[0] == '0'){
@@ -115,6 +120,7 @@ digitButtons.forEach(btn => btn.addEventListener('click',
                 displayCalculation.textContent = '';
                 operand1 = [digit];
                 state = states.OPERAND1;
+                dotButton.disabled = false;
                 break;
             case states.ERROR:
                 displayResult.textContent = digit;
@@ -123,6 +129,7 @@ digitButtons.forEach(btn => btn.addEventListener('click',
                 operand2 = [];
                 operator = null;
                 state = states.OPERAND1;
+                dotButton.disabled = false;
         }
     })
 )
@@ -140,6 +147,7 @@ operatorButtons.forEach(btn => btn.addEventListener('click',
                         displayResult.textContent = result.toString();
                         operand1 = result;
                         state = states.DONE;
+                        dotButton.disabled = false;
                     }
                 } else {
                     operand1 = +operand1.join('');
@@ -147,6 +155,7 @@ operatorButtons.forEach(btn => btn.addEventListener('click',
                     operand2 = [];
                     operator = currentOp;
                     state = states.OPERATOR;
+                    dotButton.disabled = false;
                 }
                 break;
             case states.OPERATOR:
@@ -162,6 +171,7 @@ operatorButtons.forEach(btn => btn.addEventListener('click',
                         operand1 = result;
                         state = states.DONE;
                     }
+                    dotButton.disabled = false;
                 } else {
                     displayCalculation.textContent = displayCalculation.textContent.slice(0, -1) + currentOp;
                     operator = currentOp;
@@ -171,6 +181,7 @@ operatorButtons.forEach(btn => btn.addEventListener('click',
                 operand2 = +operand2.join('');
                 const result = operate(operand1, operator, operand2);
                 displayResult.textContent = result.toString();
+                dotButton.disabled = false;
                 if (typeof result == "string"){
                     displayCalculation.textContent = '';
                     state = states.ERROR;
@@ -198,6 +209,7 @@ operatorButtons.forEach(btn => btn.addEventListener('click',
                     operator = currentOp;
                     operand2 = []; 
                     state = states.OPERATOR;
+                    dotButton.disabled = false;
                 }
                 break;
         }

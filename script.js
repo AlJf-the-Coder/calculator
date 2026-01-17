@@ -14,10 +14,10 @@ let state = states.OPERAND1;
 
 const displayResult = document.querySelector('.display #result')
 const displayCalculation = document.querySelector('.display #calculation')
-const digitButtons = document.querySelectorAll('.digits button');
-const operatorButtons = document.querySelectorAll('.operators button');
-const clearButton = document.querySelector('.functions #clear')
-const backspaceButton = document.querySelector('.functions #backspace');
+const digitButtons = document.querySelectorAll('button.digit');
+const operatorButtons = document.querySelectorAll('button.operator');
+const clearButton = document.querySelector('button#clear')
+const backspaceButton = document.querySelector('button#backspace');
 
 backspaceButton.addEventListener('click', () => {
     switch (state){

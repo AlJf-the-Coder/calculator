@@ -7,6 +7,7 @@ const states = {
     OPERAND1: "OPERAND1",
     OPERATOR: "OPERATOR",
     OPERAND2: "OPERAND2",
+    SELF: "SELF",
     DONE: "DONE",
     ERROR: "ERROR",
 }
@@ -69,6 +70,7 @@ dotButton.addEventListener('click', () => {
             displayResult.textContent += dot;
             operand2.push(dot)
             break;
+        case states.SELF:
         case states.DONE:
             displayResult.textContent = `0${dot}`;
             displayCalculation.textContent = '';
@@ -115,6 +117,7 @@ digitButtons.forEach(btn => btn.addEventListener('click',
                     operand2.push(digit)
                 }
                 break;
+            case states.SELF:
             case states.DONE:
                 displayResult.textContent = digit;
                 displayCalculation.textContent = '';
@@ -140,15 +143,20 @@ operatorButtons.forEach(btn => btn.addEventListener('click',
         switch (state){
             case states.OPERAND1:
                 if (currentOp == '='){
-                    if (operator && typeof operand2 == "number") {
-                        operand1 = +operand1.join('');
-                        const result = operate(operand1, operator, operand2);
+                    operand1 = +operand1.join('');
+                    let result;
+                    if (operator && typeof operand2 == "number"){
+                        result = operate(operand1, operator, operand2);
                         displayCalculation.textContent = `${operand1}${operator}${operand2}=`
-                        displayResult.textContent = result.toString();
-                        operand1 = result;
                         state = states.DONE;
-                        dotButton.disabled = false;
+                    } else {
+                        result = operand1;
+                        displayCalculation.textContent = `${operand1}=`
+                        state = states.SELF;
                     }
+                    displayResult.textContent = result.toString();
+                    operand1 = result;
+                    dotButton.disabled = false;
                 } else {
                     operand1 = +operand1.join('');
                     displayCalculation.textContent += `${operand1}${currentOp}`;
@@ -198,10 +206,18 @@ operatorButtons.forEach(btn => btn.addEventListener('click',
                 }
                 operand1 = result;
                 break;
+            case states.SELF:
+                if (currentOp == '=') return;
+                displayCalculation.textContent = `${operand1}${currentOp}`;
+                operator = currentOp;
+                operand2 = []; 
+                state = states.OPERATOR;
+                dotButton.disabled = false;
+                break;
             case states.DONE:
                 if (currentOp == '='){
                     const result = operate(operand1, operator, operand2);
-                    displayCalculation.textContent = `${operand1}${operator}${operand2}=`;
+                    displayCalculation.textContent = `${operand1}${operator}${operand2}=`
                     operand1 = result;
                     displayResult.textContent = result.toString();
                 } else {

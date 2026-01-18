@@ -289,7 +289,7 @@ const operations = {
     '-': (a, b) => a - b,
     '×': (a, b) => a * b,
     '*': (a, b) => a * b,
-    '/': (a, b) => a / b,
+    '/': (a, b) => (b != 0) ? a / b : "Oops! You divided by zero!",
     '÷': (a, b) => (b != 0) ? a / b : "Oops! You divided by zero!",
 }
 

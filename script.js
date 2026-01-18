@@ -26,6 +26,11 @@ const backspaceButton = document.querySelector('button#backspace');
 
 document.addEventListener('keydown', (e)=> {
     const key = e.key;
+    const digits = "0123456789";
+    if (digits.includes(key)){
+        digitHandler(key);
+        return;
+    }
     switch (key){
         case "Backspace":
             backspaceHandler();
@@ -94,6 +99,53 @@ function dotHandler(){
     dotButton.disabled = true;
 }
 
+function digitHandler(digit){
+    switch (state){
+        case states.OPERAND1:
+            if (displayResult.textContent.length > MAX_DIGITS) return;
+            if (operand1.length == 1 && operand1[0] == '0'){
+                displayResult.textContent = digit;
+                operand1 = [digit];
+            } else {
+                displayResult.textContent += digit;
+                operand1.push(digit)
+            }
+            break;
+        case states.OPERATOR:
+            displayResult.textContent = digit;
+            operand2 = [digit];
+            state = states.OPERAND2;
+            dotButton.disabled = false;
+            break;
+        case states.OPERAND2:
+            if (displayResult.textContent.length > MAX_DIGITS) return;
+            if (operand2.length == 1 && operand2[0] == '0'){
+                displayResult.textContent = digit;
+                operand2 = [digit];
+            } else {
+                displayResult.textContent += digit;
+                operand2.push(digit)
+            }
+            break;
+        case states.SELF:
+        case states.DONE:
+            displayResult.textContent = digit;
+            displayCalculation.textContent = '';
+            operand1 = [digit];
+            state = states.OPERAND1;
+            dotButton.disabled = false;
+            break;
+        case states.ERROR:
+            displayResult.textContent = digit;
+            displayCalculation.textContent = '';
+            operand1 = [digit];
+            operand2 = [];
+            operator = null;
+            state = states.OPERAND1;
+            dotButton.disabled = false;
+    }
+}
+
 backspaceButton.addEventListener('click', backspaceHandler);
 
 clearButton.addEventListener('click', () => {
@@ -109,53 +161,7 @@ clearButton.addEventListener('click', () => {
 dotButton.addEventListener('click', dotHandler);
 
 digitButtons.forEach(btn => btn.addEventListener('click', 
-    () => {
-        const digit = btn.textContent;
-        switch (state){
-            case states.OPERAND1:
-                if (displayResult.textContent.length > MAX_DIGITS) return;
-                if (operand1.length == 1 && operand1[0] == '0'){
-                    displayResult.textContent = digit;
-                    operand1 = [digit];
-                } else {
-                    displayResult.textContent += digit;
-                    operand1.push(digit)
-                }
-                break;
-            case states.OPERATOR:
-                displayResult.textContent = digit;
-                operand2 = [digit];
-                state = states.OPERAND2;
-                dotButton.disabled = false;
-                break;
-            case states.OPERAND2:
-                if (displayResult.textContent.length > MAX_DIGITS) return;
-                if (operand2.length == 1 && operand2[0] == '0'){
-                    displayResult.textContent = digit;
-                    operand2 = [digit];
-                } else {
-                    displayResult.textContent += digit;
-                    operand2.push(digit)
-                }
-                break;
-            case states.SELF:
-            case states.DONE:
-                displayResult.textContent = digit;
-                displayCalculation.textContent = '';
-                operand1 = [digit];
-                state = states.OPERAND1;
-                dotButton.disabled = false;
-                break;
-            case states.ERROR:
-                displayResult.textContent = digit;
-                displayCalculation.textContent = '';
-                operand1 = [digit];
-                operand2 = [];
-                operator = null;
-                state = states.OPERAND1;
-                dotButton.disabled = false;
-        }
-    })
+    () => digitHandler(btn.textContent))
 )
 
 operatorButtons.forEach(btn => btn.addEventListener('click', 

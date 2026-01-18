@@ -24,7 +24,16 @@ const operatorButtons = document.querySelectorAll('button.operator');
 const clearButton = document.querySelector('button#clear')
 const backspaceButton = document.querySelector('button#backspace');
 
-backspaceButton.addEventListener('click', () => {
+document.addEventListener('keydown', (e)=> {
+    const key = e.key;
+    switch (key){
+        case "Backspace":
+            backspaceHandler();
+            break;
+    }
+})
+
+function backspaceHandler(){
     switch (state){
         case states.OPERAND1:
             if (operand1.pop() == '.'){
@@ -45,7 +54,9 @@ backspaceButton.addEventListener('click', () => {
             displayResult.textContent = operand2.join('')
             break;
     }
-})
+}
+
+backspaceButton.addEventListener('click', backspaceHandler);
 
 clearButton.addEventListener('click', () => {
     displayResult.textContent = '0';

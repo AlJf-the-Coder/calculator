@@ -13,6 +13,7 @@ const states = {
 }
 
 const MAX_DECIMALS = 12;
+const MAX_DIGITS = 14;
 let state = states.OPERAND1;
 
 const displayResult = document.querySelector('.display #result')
@@ -96,6 +97,7 @@ digitButtons.forEach(btn => btn.addEventListener('click',
         const digit = btn.textContent;
         switch (state){
             case states.OPERAND1:
+                if (displayResult.textContent.length > MAX_DIGITS) return;
                 if (operand1.length == 1 && operand1[0] == '0'){
                     displayResult.textContent = digit;
                     operand1 = [digit];
@@ -111,6 +113,7 @@ digitButtons.forEach(btn => btn.addEventListener('click',
                 dotButton.disabled = false;
                 break;
             case states.OPERAND2:
+                if (displayResult.textContent.length > MAX_DIGITS) return;
                 if (operand2.length == 1 && operand2[0] == '0'){
                     displayResult.textContent = digit;
                     operand2 = [digit];

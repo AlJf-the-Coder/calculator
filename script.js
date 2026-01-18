@@ -30,6 +30,9 @@ document.addEventListener('keydown', (e)=> {
         case "Backspace":
             backspaceHandler();
             break;
+        case ".":
+            dotHandler();
+            break;
     }
 })
 
@@ -56,20 +59,9 @@ function backspaceHandler(){
     }
 }
 
-backspaceButton.addEventListener('click', backspaceHandler);
-
-clearButton.addEventListener('click', () => {
-    displayResult.textContent = '0';
-    displayCalculation.textContent = '';
-    operand1 = ['0'];
-    operand2 = [];
-    operator = null;
-    dotButton.disabled = false;
-    state = states.OPERAND1;
-})
-
-dotButton.addEventListener('click', () => {
-    const dot = dotButton.textContent;
+function dotHandler(){
+    if (dotButton.disabled) return;
+    const dot = '.';
     switch (state){
         case states.OPERAND1:
             displayResult.textContent += dot;
@@ -100,8 +92,21 @@ dotButton.addEventListener('click', () => {
             state = states.OPERAND1;
     }
     dotButton.disabled = true;
+}
+
+backspaceButton.addEventListener('click', backspaceHandler);
+
+clearButton.addEventListener('click', () => {
+    displayResult.textContent = '0';
+    displayCalculation.textContent = '';
+    operand1 = ['0'];
+    operand2 = [];
+    operator = null;
+    dotButton.disabled = false;
+    state = states.OPERAND1;
 })
 
+dotButton.addEventListener('click', dotHandler);
 
 digitButtons.forEach(btn => btn.addEventListener('click', 
     () => {

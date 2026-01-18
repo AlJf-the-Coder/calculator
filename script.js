@@ -11,6 +11,8 @@ const states = {
     DONE: "DONE",
     ERROR: "ERROR",
 }
+
+const MAX_DECIMALS = 12;
 let state = states.OPERAND1;
 
 const displayResult = document.querySelector('.display #result')
@@ -170,13 +172,14 @@ operatorButtons.forEach(btn => btn.addEventListener('click',
                 if (currentOp == "="){
                     operand2 = operand1;
                     const result = operate(operand1, operator, operand2);
-                    displayResult.textContent = result.toString();
                     if (typeof result == "string"){
+                        displayResult.textContent = result;
                         displayCalculation.textContent = '';
                         state = states.ERROR;
                     } else {
                         displayCalculation.textContent = `${operand1}${operator}${operand2}=`
-                        operand1 = result;
+                        displayResult.textContent = roundDecimals(result);
+                        operand1 = +displayResult.textContent;
                         state = states.DONE;
                     }
                     dotButton.disabled = false;
@@ -188,13 +191,14 @@ operatorButtons.forEach(btn => btn.addEventListener('click',
             case states.OPERAND2:
                 operand2 = +operand2.join('');
                 const result = operate(operand1, operator, operand2);
-                displayResult.textContent = result.toString();
                 dotButton.disabled = false;
                 if (typeof result == "string"){
+                    displayResult.textContent = result;
                     displayCalculation.textContent = '';
                     state = states.ERROR;
                     return;
                 }
+                displayResult.textContent = roundDecimals(result);
                 if (currentOp == '='){
                     displayCalculation.textContent = `${operand1}${operator}${operand2}=`;
                     state = states.DONE;
@@ -204,7 +208,7 @@ operatorButtons.forEach(btn => btn.addEventListener('click',
                     operand2 = []; 
                     state = states.OPERATOR;
                 }
-                operand1 = result;
+                operand1 = +displayResult.textContent;
                 break;
             case states.SELF:
                 if (currentOp == '=') return;
@@ -218,8 +222,8 @@ operatorButtons.forEach(btn => btn.addEventListener('click',
                 if (currentOp == '='){
                     const result = operate(operand1, operator, operand2);
                     displayCalculation.textContent = `${operand1}${operator}${operand2}=`
-                    operand1 = result;
-                    displayResult.textContent = result.toString();
+                    displayResult.textContent = roundDecimals(result);
+                    operand1 = +displayResult.textContent;
                 } else {
                     displayCalculation.textContent = `${operand1}${currentOp}`;
                     operator = currentOp;
@@ -231,6 +235,18 @@ operatorButtons.forEach(btn => btn.addEventListener('click',
         }
     }
 ))
+
+function roundDecimals(num){
+    const numString = num.toString();
+
+    if (!numString.includes('.')) return numString;
+
+    const decimals = numString.slice(numString.indexOf('.') + 1).length;
+    return (decimals > MAX_DECIMALS) ? 
+                num.toFixed(MAX_DECIMALS)
+                    .replace(/\.?0+$/, "") :  
+                numString;
+}
 
 const operations = {
     '+': (a, b) => a + b,
